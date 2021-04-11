@@ -1,0 +1,10 @@
+deck = Squib.gsheet '...'
+
+Squib::Deck.new(cards: deck['name'].size, layout: ['src/<%= name %>/layout/layout.yml', 'src/<%= name %>/layout/deck.yml']) do
+    # hint text: :cyan
+
+    # ...
+
+    # pnp file: '<%= name %>_deck.pdf'
+    tts prefix: '<%= name %>_deck_'
+end

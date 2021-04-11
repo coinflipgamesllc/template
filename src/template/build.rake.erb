@@ -1,0 +1,26 @@
+load 'src/squib/base.rb'
+
+pwd = 'src/<%= name %>'
+
+namespace "<%= name %>" do
+    task :config do
+        build_mode = ENV['build'] || 'debug'
+        Squib.enable_build_globally build_mode
+
+        custom_colors = {
+            'black'     => '#333',
+            'purple'    => '#92278F',
+            'green'     => '#8DC63F',
+            'yellow'    => '#FFF200',
+            'orange'    => '#F7941D',
+            'blue'      => '#00AEEF',
+            'magenta'   => '#EC008C',
+        }
+        Squib.configure img_dir: "#{pwd}/illustrations", custom_colors: custom_colors
+    end
+
+    desc "Build the deck"
+    task :deck => ['<%= name %>:config', "#{pwd}/src/deck.rb", "#{pwd}/layout/deck.yml", "#{pwd}/layout/layout.yml"] do
+        load "#{pwd}/src/deck.rb"
+    end
+end

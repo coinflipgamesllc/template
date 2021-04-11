@@ -1,0 +1,33 @@
+#!/usr/bin/env ruby
+
+require 'erb'
+require 'fileutils'
+
+name = ARGV.join(' ').downcase.strip.gsub(' ', '-').gsub(/[^\w-]/, '')
+if name.nil? || name.empty? then
+    puts "Usage: squibc {name}"
+    exit
+end
+
+puts "Creating new squib project for #{name}..."
+
+base_dir = './src'
+source = "#{base_dir}/template"
+destination = "#{base_dir}/#{name}"
+
+if File.directory?(destination) then
+    puts "Directory #{destination} exists. Refusing to overwrite."
+    exit
+end
+
+FileUtils.copy_entry source, destination
+
+deck_template = ERB.new File.read("#{destination}/src/deck.rb.erb"), nil, "%"
+File.write("#{destination}/src/deck.rb", deck_template.result(binding))
+FileUtils.rm "#{destination}/src/deck.rb.erb"
+
+rake_template = ERB.new File.read("#{destination}/build.rake.erb"), nil, "%"
+File.write("#{destination}/build.rake", rake_template.result(binding))
+FileUtils.rm "#{destination}/build.rake.erb"
+
+puts "Done!"

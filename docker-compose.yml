@@ -1,0 +1,10 @@
+version: "3.2"
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: reflex -s -g .reflex -- reflex -d fancy -c .reflex
+    volumes:
+      - .:/games
